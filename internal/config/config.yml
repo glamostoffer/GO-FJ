@@ -5,7 +5,7 @@ http:
 postgres:
   name: 'go-fj'
   password: 'password'
-  host: 'postgres'
   max_cons: 50
-  port: '5432'
+  host: 'localhost'
+  port: '5433'
   conn_timeout: 10
