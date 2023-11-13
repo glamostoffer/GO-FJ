@@ -3,15 +3,21 @@ package main
 import (
 	"GO-FJ/internal/config"
 	"GO-FJ/internal/server"
-	"log"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	logrus.SetFormatter(new(logrus.JSONFormatter))
+
 	cfg, err := config.NewConfig()
 	if err != nil {
-		log.Fatalf("Error reading config: %s", err)
+		logrus.Fatalf("Error reading config: %s", err)
 		return
 	}
 
-	server.New(cfg).Run()
+	err = server.New(cfg).Run()
+	if err != nil {
+		logrus.Fatalf(err.Error())
+		return
+	}
 }

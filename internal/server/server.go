@@ -4,6 +4,7 @@ import (
 	"GO-FJ/internal/config"
 	conn "GO-FJ/pkg/postgres_connector"
 	"fmt"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,7 @@ type Server struct {
 func New(cfg *config.Config) *Server {
 	return &Server{
 		cfg:          cfg,
-		serverEngine: gin.New(),
+		serverEngine: gin.Default(),
 	}
 }
 
@@ -27,10 +28,8 @@ func (s Server) Run() error {
 		return err
 	}
 	fmt.Printf(`Connected to DB with connector %s %s`, psqlConn, "\n")
-	// userUsecase := userUsecase.New(msqlConn)
-	// userGroup := s.serverEngine.Group("/user")
-	// userHandlers := userHandlers.New(userUsecase)
-	// routeUserHandlers(userGroup, userHandlers)
+
+	Setup(psqlConn.GetDB(), time.Minute*30, s.serverEngine)
 
 	err = s.serverEngine.Run(fmt.Sprintf(":%s", s.cfg.HTTP.Port))
 
