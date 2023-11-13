@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"GO-FJ/internal/domain"
+	"GO-FJ/util"
 	"context"
 	"time"
 )
@@ -31,7 +32,7 @@ func (su *signupUsecase) GetUserByEmail(c context.Context, email string) (domain
 }
 
 func (su *signupUsecase) CreateAccessToken(user *domain.User, secret string, expiry int) (accessToken string, err error) {
-	return "", nil
+	return util.CreateAccessToken(user, secret, expiry)
 }
 
 func (su *signupUsecase) CreateRefreshToken(user *domain.User, secret string, expiry int) (refreshToken string, err error) {

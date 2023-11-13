@@ -3,9 +3,9 @@ package domain
 import "context"
 
 type SignupRequest struct {
-	Name     string `form:"name" binding:"required"`
-	Email    string `form:"email" binding:"required,email"`
-	Password string `form:"password" binding:"required"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 type SignupResponse struct {
