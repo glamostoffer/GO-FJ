@@ -7,7 +7,7 @@ import (
 )
 
 type Connector struct {
-	*sql.DB
+	db *sql.DB
 }
 
 func NewConnector(cfg Postgres) (*Connector, error) {
@@ -18,7 +18,6 @@ func NewConnector(cfg Postgres) (*Connector, error) {
 		cfg.Port,
 		cfg.Name,
 	))
-
 	if err != nil {
 		return nil, err
 	}
@@ -29,10 +28,14 @@ func NewConnector(cfg Postgres) (*Connector, error) {
 	}
 
 	return &Connector{
-		DB: db,
+		db: db,
 	}, nil
 }
 
 func (d *Connector) Close() error {
 	return d.Close()
+}
+
+func (d *Connector) GetDB() *sql.DB {
+	return d.db
 }
