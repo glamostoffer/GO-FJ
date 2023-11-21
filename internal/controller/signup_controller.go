@@ -63,14 +63,16 @@ func (sc *SignupController) Signup(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := sc.SignupUsecase.CreateAccessToken(&newUser, "supersecretkey", 60) // TODO: добавить secret и timeout в cfg
+	accessToken, err := sc.SignupUsecase.CreateAccessToken(&newUser, "supersecretkey", 1) // TODO: добавить secret и timeout в cfg
 	if err != nil {
+		logrus.Errorf("error during creating access token: %s", err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	refreshToken, err := sc.SignupUsecase.CreateRefreshToken(&newUser, "SuperSecretKey", 60)
+	refreshToken, err := sc.SignupUsecase.CreateRefreshToken(&newUser, "SuperSecretKey", 1)
 	if err != nil {
+		logrus.Errorf("error during creating refresh token: %s", err.Error())
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
 	}
