@@ -1,7 +1,7 @@
-package server
+package route
 
 import (
-	"GO-FJ/internal/controller"
+	"GO-FJ/internal/api/controller"
 	"GO-FJ/internal/repository"
 	"GO-FJ/internal/usecase"
 	"database/sql"

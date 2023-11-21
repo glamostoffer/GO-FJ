@@ -1,6 +1,7 @@
 package server
 
 import (
+	"GO-FJ/internal/api/route"
 	"GO-FJ/internal/config"
 	conn "GO-FJ/pkg/postgres_connector"
 	"fmt"
@@ -29,7 +30,7 @@ func (s Server) Run() error {
 	}
 	fmt.Printf(`Connected to DB with connector %s %s`, psqlConn, "\n")
 
-	Setup(psqlConn.GetDB(), time.Minute*30, s.serverEngine)
+	route.Setup(psqlConn.GetDB(), time.Minute*30, s.serverEngine)
 
 	err = s.serverEngine.Run(fmt.Sprintf(":%s", s.cfg.HTTP.Port))
 
