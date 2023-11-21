@@ -36,5 +36,5 @@ func (su *signupUsecase) CreateAccessToken(user *domain.User, secret string, exp
 }
 
 func (su *signupUsecase) CreateRefreshToken(user *domain.User, secret string, expiry int) (refreshToken string, err error) {
-	return "", nil
+	return util.CreateRefreshToken(user, secret, expiry)
 }
