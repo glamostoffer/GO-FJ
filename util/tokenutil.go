@@ -56,7 +56,25 @@ func IsAuthorized(requestToken string, secret string) (bool, error) {
 	return true, nil
 }
 
-func ExtractIDFromToken(requestToken string, secret string) (string, error) {
+func IsAdmin(requestToken string, secret string) (bool, error) {
+	token, err := jwt.ParseWithClaims(requestToken, &domain.JwtCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return false, err
+	}
+
+	if token.Claims.(*domain.JwtCustomClaims).Role != "admin" {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+func ExtractIDFromToken(requestToken string, secret string) (float64, error) {
 	token, err := jwt.Parse(requestToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -65,14 +83,14 @@ func ExtractIDFromToken(requestToken string, secret string) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return -1, err
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 
 	if !ok && !token.Valid {
-		return "", fmt.Errorf("Invalid Token")
+		return -1, fmt.Errorf("Invalid Token")
 	}
 
-	return claims["id"].(string), nil
+	return claims["id"].(float64), nil
 }
