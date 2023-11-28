@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS images (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    url VARCHAR(255) NOT NULL,
+    post_id INT REFERENCES posts(id)
+);
