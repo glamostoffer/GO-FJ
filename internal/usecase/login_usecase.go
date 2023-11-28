@@ -2,17 +2,18 @@ package usecase
 
 import (
 	"GO-FJ/internal/domain"
+	"GO-FJ/internal/repository"
 	"GO-FJ/util"
 	"context"
 	"time"
 )
 
 type loginUsecase struct {
-	userRepository domain.UserRepository
+	userRepository repository.UserRepository
 	contextTimeout time.Duration
 }
 
-func NewLoginUsecase(userRepository domain.UserRepository, timeout time.Duration) domain.LoginUsecase {
+func NewLoginUsecase(userRepository repository.UserRepository, timeout time.Duration) LoginUsecase {
 	return &loginUsecase{
 		userRepository: userRepository,
 		contextTimeout: timeout,

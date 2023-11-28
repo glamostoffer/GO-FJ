@@ -2,17 +2,18 @@ package usecase
 
 import (
 	"GO-FJ/internal/domain"
+	"GO-FJ/internal/repository"
 	"GO-FJ/util"
 	"context"
 	"time"
 )
 
 type signupUsecase struct {
-	userRepository domain.UserRepository
+	userRepository repository.UserRepository
 	contextTimeout time.Duration
 }
 
-func NewSignupUsecase(userRepository domain.UserRepository, timeout time.Duration) domain.SignupUsecase {
+func NewSignupUsecase(userRepository repository.UserRepository, timeout time.Duration) SignupUsecase {
 	return &signupUsecase{
 		userRepository: userRepository,
 		contextTimeout: timeout,
