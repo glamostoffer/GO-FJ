@@ -14,5 +14,5 @@ func Setup(db *sql.DB, timeout time.Duration, gin *gin.Engine) {
 
 	protectedRouter := gin.Group("")
 	protectedRouter.Use(middleware.JwtAuth("supersecretkey"))
-	//NewJwtRouter(db, timeout, protectedRouter)
+	NewPostRouter(db, timeout, protectedRouter)
 }

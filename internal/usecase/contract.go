@@ -17,3 +17,10 @@ type LoginUsecase interface {
 	CreateAccessToken(user *domain.User, secret string, expiry int) (accessToken string, err error)
 	CreateRefreshToken(user *domain.User, secret string, expiry int) (refreshToken string, err error)
 }
+
+type PostUsecase interface {
+	Create(c context.Context, post *domain.Post) error
+	GetByTitle(c context.Context, title string) (domain.Post, error)
+	GetByID(c context.Context, id string) (domain.Post, error)
+	GetByUserID(c context.Context, userID string) (domain.Post, error)
+}
