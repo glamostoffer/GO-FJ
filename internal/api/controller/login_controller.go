@@ -2,6 +2,7 @@ package controller
 
 import (
 	"GO-FJ/internal/domain"
+	"GO-FJ/internal/usecase"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -9,7 +10,7 @@ import (
 )
 
 type LoginController struct {
-	LoginUsecase domain.LoginUsecase
+	LoginUsecase usecase.LoginUsecase
 }
 
 func (lc *LoginController) Login(c *gin.Context) {
