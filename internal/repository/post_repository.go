@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
+	"time"
 )
 
 type postRepository struct {
@@ -126,7 +127,7 @@ func (pr *postRepository) GetByUserID(c context.Context, userID string) ([]domai
 	err := pr.db.SelectContext(
 		c,
 		&posts,
-		queryGetUserByUserID,
+		queryGetPostByUserID,
 		userID,
 	)
 	if err != nil {
@@ -151,4 +152,21 @@ func (pr *postRepository) GetByUserID(c context.Context, userID string) ([]domai
 	}
 
 	return posts, nil
+}
+
+func (pr *postRepository) UpdatePost(c context.Context, newPost domain.Post) error {
+	_, err := pr.db.ExecContext(
+		c,
+		queryUpdatePost,
+		newPost.Title,
+		newPost.Text,
+		time.Now(),
+		newPost.ID,
+	)
+	if err != nil {
+		logrus.Errorf("cannot update post with id %d: %s", newPost.ID, err.Error())
+		return err
+	}
+
+	return nil
 }

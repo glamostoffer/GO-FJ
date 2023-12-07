@@ -43,8 +43,10 @@ func (pu *postUsecase) GetByUserID(c context.Context, userID string) ([]domain.P
 	return pu.postRepository.GetByUserID(ctx, userID)
 }
 
-func (pu *postUsecase) UpdatePost(c context.Context, id int64) (domain.Post, error) {
-	return domain.Post{}, nil
+func (pu *postUsecase) UpdatePost(c context.Context, newPost domain.Post) error {
+	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
+	defer cancel()
+	return pu.postRepository.UpdatePost(ctx, newPost)
 }
 
 func (pu *postUsecase) DeletePost(c context.Context, id int64) error {

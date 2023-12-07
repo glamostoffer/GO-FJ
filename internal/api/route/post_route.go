@@ -24,5 +24,6 @@ func NewPostRouter(db *sqlx.DB, timeout time.Duration, group *gin.RouterGroup) {
 		post.GET("/user", pc.GetPostByUserID)
 		post.GET("/titles", pc.GetPostByTitle)
 		post.GET("/id", pc.GetPostByID)
+		post.PUT("", pc.UpdatePost)
 	}
 }

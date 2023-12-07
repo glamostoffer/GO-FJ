@@ -102,3 +102,39 @@ func (pc *PostController) GetPostByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, post)
 }
+
+func (pc *PostController) UpdatePost(c *gin.Context) {
+	logrus.Info("update post request received")
+	queryParams := c.Request.URL.Query()
+	id := queryParams.Get("id")
+	userID := c.GetFloat64("user-id")
+
+	post, err := pc.PostUsecase.GetByID(c, id)
+	if err != nil {
+		logrus.Errorf("cannot get posts where id is %s: %s", id, err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if post.UserID != int64(userID) {
+		logrus.Errorf("trying to update someone else's post")
+		c.JSON(http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	err = c.ShouldBind(&post)
+	if err != nil {
+		logrus.Errorf("cannot bind a request into post update model: %s", err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = pc.PostUsecase.UpdatePost(c, post)
+	if err != nil {
+		logrus.Errorf("cannot update post: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}

@@ -10,6 +10,7 @@ type PostRepository interface {
 	GetByTitle(c context.Context, title string) ([]domain.Post, error)
 	GetByID(c context.Context, id string) (domain.Post, error)
 	GetByUserID(c context.Context, userID string) ([]domain.Post, error)
+	UpdatePost(c context.Context, newPost domain.Post) error
 }
 
 type UserRepository interface {

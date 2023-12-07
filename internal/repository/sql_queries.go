@@ -68,7 +68,7 @@ const (
 		FROM posts
 		WHERE title = $1`
 
-	queryGetUserByUserID = `
+	queryGetPostByUserID = `
 		SELECT 
 		    id,
 		    title,
@@ -78,6 +78,13 @@ const (
 		    user_id
 		FROM posts
 		WHERE user_id = $1`
+
+	queryUpdatePost = `
+		UPDATE posts
+		SET title = $1,
+		    text = $2,
+		    updated_at = $3
+		WHERE id = $4`
 
 	queryCreateImage = `
 		INSERT INTO images(
