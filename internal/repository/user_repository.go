@@ -3,24 +3,30 @@ package repository
 import (
 	"GO-FJ/internal/domain"
 	"context"
-	"database/sql"
-	"fmt"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
 type userRepository struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
-func NewUserRepository(db *sql.DB) UserRepository {
+func NewUserRepository(db *sqlx.DB) UserRepository {
 	return &userRepository{db}
 }
 
 func (ur *userRepository) Create(c context.Context, user *domain.User) error {
-	var lastInsertId int64
-	query := "INSERT INTO users(name, email, password, role, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
-	err := ur.db.QueryRowContext(c, query, user.Name, user.Email, user.Password, user.Role, user.CreatedAt, user.UpdatedAt).Scan(&lastInsertId)
-	fmt.Println(lastInsertId)
+	//var lastInsertId int64
+	_, err := ur.db.ExecContext(
+		c,
+		queryCreateUser,
+		user.Name,
+		user.Email,
+		user.Password,
+		user.Role,
+		user.CreatedAt,
+		user.UpdatedAt,
+	)
 	if err != nil {
 		logrus.Errorf("cannot insert user into users: %s", err.Error())
 	}
@@ -30,8 +36,7 @@ func (ur *userRepository) Create(c context.Context, user *domain.User) error {
 
 func (ur *userRepository) GetByEmail(c context.Context, email string) (domain.User, error) {
 	u := domain.User{}
-	query := "SELECT id, name, email, password, role, created_at, updated_at FROM users WHERE email = $1"
-	err := ur.db.QueryRowContext(c, query, email).Scan(&u.ID, &u.Name, &u.Email, &u.Password, &u.Role, &u.CreatedAt, &u.UpdatedAt)
+	err := ur.db.GetContext(c, &u, queryGetUserByEmail, email)
 	if err != nil {
 		return u, nil
 	}
@@ -41,8 +46,7 @@ func (ur *userRepository) GetByEmail(c context.Context, email string) (domain.Us
 
 func (ur *userRepository) GetByID(c context.Context, id string) (domain.User, error) {
 	u := domain.User{}
-	query := "SELECT id, name, email, password, role, created_at, updated_at FROM users WHERE id = $1"
-	err := ur.db.QueryRowContext(c, query, id).Scan(&u.ID, &u.Name, &u.Email, &u.Password, &u.Role, &u.CreatedAt, &u.UpdatedAt)
+	err := ur.db.GetContext(c, &u, queryGetUserByID, id)
 	if err != nil {
 		return u, nil
 	}
