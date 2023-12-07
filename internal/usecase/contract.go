@@ -20,7 +20,7 @@ type LoginUsecase interface {
 
 type PostUsecase interface {
 	Create(c context.Context, post *domain.Post) error
-	GetByTitle(c context.Context, title string) (domain.Post, error)
+	GetByTitle(c context.Context, title string) ([]domain.Post, error)
 	GetByID(c context.Context, id string) (domain.Post, error)
-	GetByUserID(c context.Context, userID string) (domain.Post, error)
+	GetByUserID(c context.Context, userID string) ([]domain.Post, error)
 }

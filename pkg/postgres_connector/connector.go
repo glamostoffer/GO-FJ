@@ -1,17 +1,17 @@
 package postgres_connector
 
 import (
-	"database/sql"
 	"fmt"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
 type Connector struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
 func NewConnector(cfg Postgres) (*Connector, error) {
-	db, err := sql.Open("postgres", fmt.Sprintf(
+	db, err := sqlx.Open("postgres", fmt.Sprintf(
 		"postgresql://root:%s@%s:%s/%s?sslmode=disable",
 		cfg.Password,
 		cfg.Host,
@@ -36,6 +36,6 @@ func (d *Connector) Close() error {
 	return d.Close()
 }
 
-func (d *Connector) GetDB() *sql.DB {
+func (d *Connector) GetDB() *sqlx.DB {
 	return d.db
 }
