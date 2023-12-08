@@ -70,7 +70,7 @@ func (pr *postRepository) GetByTitle(c context.Context, title string) ([]domain.
 	)
 	if err != nil {
 		logrus.Errorf("cannot get posts with title %s: %s", title, err.Error())
-		return nil, err
+		return nil, nil
 	}
 
 	for _, post := range posts {
@@ -102,7 +102,7 @@ func (pr *postRepository) GetByID(c context.Context, id string) (domain.Post, er
 	)
 	if err != nil {
 		logrus.Errorf("cannot get post with id %s: %s", id, err.Error())
-		return domain.Post{}, err
+		return domain.Post{}, nil
 	}
 
 	var images []string
@@ -132,7 +132,7 @@ func (pr *postRepository) GetByUserID(c context.Context, userID string) ([]domai
 	)
 	if err != nil {
 		logrus.Errorf("cannot get posts with title %s: %s", userID, err.Error())
-		return nil, err
+		return nil, nil
 	}
 
 	for _, post := range posts {
@@ -165,6 +165,39 @@ func (pr *postRepository) UpdatePost(c context.Context, newPost domain.Post) err
 	)
 	if err != nil {
 		logrus.Errorf("cannot update post with id %d: %s", newPost.ID, err.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (pr *postRepository) DeletePost(c context.Context, id string) error {
+	tx, err := pr.db.Begin()
+	if err != nil {
+		tx.Rollback()
+		logrus.Errorf("cannot start transaction: %s", err.Error())
+		return err
+	}
+
+	_, err = pr.db.ExecContext(
+		c,
+		queryDeleteImageByPostID,
+		id,
+	)
+	if err != nil {
+		tx.Rollback()
+		logrus.Errorf("cannot delete images: %s", err.Error())
+		return err
+	}
+
+	_, err = pr.db.ExecContext(
+		c,
+		queryDeletePost,
+		id,
+	)
+	if err != nil {
+		tx.Rollback()
+		logrus.Errorf("cannot delete post: %s", err.Error())
 		return err
 	}
 

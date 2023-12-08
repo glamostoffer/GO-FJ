@@ -86,6 +86,11 @@ const (
 		    updated_at = $3
 		WHERE id = $4`
 
+	queryDeletePost = `
+		DELETE
+		FROM posts
+		WHERE id = $1`
+
 	queryCreateImage = `
 		INSERT INTO images(
 			url,
@@ -95,6 +100,11 @@ const (
 
 	queryGetImageByPostID = `
 		SELECT url
+		FROM images
+		WHERE post_id = $1`
+
+	queryDeleteImageByPostID = `
+		DELETE
 		FROM images
 		WHERE post_id = $1`
 )

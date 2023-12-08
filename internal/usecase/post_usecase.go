@@ -49,6 +49,8 @@ func (pu *postUsecase) UpdatePost(c context.Context, newPost domain.Post) error 
 	return pu.postRepository.UpdatePost(ctx, newPost)
 }
 
-func (pu *postUsecase) DeletePost(c context.Context, id int64) error {
-	return nil
+func (pu *postUsecase) DeletePost(c context.Context, id string) error {
+	ctx, cancel := context.WithTimeout(c, pu.contextTimeout)
+	defer cancel()
+	return pu.postRepository.DeletePost(ctx, id)
 }

@@ -138,3 +138,32 @@ func (pc *PostController) UpdatePost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, nil)
 }
+
+func (pc *PostController) DeletePost(c *gin.Context) {
+	logrus.Info("delete post request received")
+	queryParams := c.Request.URL.Query()
+	id := queryParams.Get("id")
+	userID := c.GetFloat64("user-id")
+
+	post, err := pc.PostUsecase.GetByID(c, id)
+	if err != nil {
+		logrus.Errorf("cannot get posts where id is %s: %s", id, err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if post.UserID != int64(userID) {
+		logrus.Errorf("trying to update someone else's post")
+		c.JSON(http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	err = pc.PostUsecase.DeletePost(c, id)
+	if err != nil {
+		logrus.Errorf("cannot delete post: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}
