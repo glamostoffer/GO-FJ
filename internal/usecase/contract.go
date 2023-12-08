@@ -26,3 +26,11 @@ type PostUsecase interface {
 	UpdatePost(c context.Context, newPost domain.Post) error
 	DeletePost(c context.Context, id string) error
 }
+
+type CommentUsecase interface {
+	Create(c context.Context, comment *domain.Comment) error
+	GetByID(c context.Context, id string) (domain.Comment, error)
+	GetByPostID(c context.Context, postID string) ([]domain.Comment, error)
+	UpdateComment(c context.Context, newComment domain.Comment) error
+	DeleteComment(c context.Context, id string) error
+}

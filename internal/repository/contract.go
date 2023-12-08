@@ -19,3 +19,11 @@ type UserRepository interface {
 	GetByEmail(c context.Context, email string) (domain.User, error)
 	GetByID(c context.Context, id string) (domain.User, error)
 }
+
+type CommentRepository interface {
+	Create(c context.Context, comment *domain.Comment) error
+	GetByID(c context.Context, id string) (domain.Comment, error)
+	GetByPostID(c context.Context, postID string) ([]domain.Comment, error)
+	UpdateComment(c context.Context, newComment domain.Comment) error
+	DeleteComment(c context.Context, id string) error
+}

@@ -15,4 +15,5 @@ func Setup(db *sqlx.DB, timeout time.Duration, gin *gin.Engine) {
 	protectedRouter := gin.Group("")
 	protectedRouter.Use(middleware.JwtAuth("supersecretkey"))
 	NewPostRouter(db, timeout, protectedRouter)
+	NewCommentRouter(db, timeout, protectedRouter)
 }

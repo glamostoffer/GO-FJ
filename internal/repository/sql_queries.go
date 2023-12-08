@@ -107,4 +107,50 @@ const (
 		DELETE
 		FROM images
 		WHERE post_id = $1`
+
+	queryCreateComment = `
+		INSERT INTO comments(
+	 		message,
+		 	post_id,
+			user_id,
+			parent_id,
+		    created_at,
+			updated_at
+		) VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id`
+
+	queryGetCommentByID = `
+		SELECT
+			id,
+			message,
+			post_id,
+			user_id,
+			parent_id,
+			created_at,
+			updated_at
+		FROM comments
+		WHERE id = $1`
+
+	queryGetCommentsByPostID = `
+		SELECT
+			id,
+			message,
+			post_id,
+			user_id,
+			parent_id,
+			created_at,
+			updated_at
+		FROM comments
+		WHERE post_id = $1`
+
+	queryUpdateComment = `
+		UPDATE comments
+		SET message = $1,
+		    updated_at = $2
+		WHERE id = $3`
+
+	queryDeleteComment = `
+		DELETE
+		FROM comments
+		WHERE id = $1`
 )
