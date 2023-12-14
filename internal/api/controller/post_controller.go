@@ -118,7 +118,7 @@ func (pc *PostController) UpdatePost(c *gin.Context) {
 
 	if post.UserID != int64(userID) {
 		logrus.Errorf("trying to update someone else's post")
-		c.JSON(http.StatusUnauthorized, err.Error())
+		c.JSON(http.StatusUnauthorized, nil)
 		return
 	}
 
@@ -154,7 +154,7 @@ func (pc *PostController) DeletePost(c *gin.Context) {
 
 	if post.UserID != int64(userID) {
 		logrus.Errorf("trying to update someone else's post")
-		c.JSON(http.StatusUnauthorized, err.Error())
+		c.JSON(http.StatusUnauthorized, nil)
 		return
 	}
 

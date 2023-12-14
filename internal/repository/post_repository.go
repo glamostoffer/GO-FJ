@@ -3,6 +3,8 @@ package repository
 import (
 	"GO-FJ/internal/domain"
 	"context"
+	"database/sql"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 	"time"
@@ -68,9 +70,12 @@ func (pr *postRepository) GetByTitle(c context.Context, title string) ([]domain.
 		queryGetPostByTitle,
 		title,
 	)
-	if err != nil {
-		logrus.Errorf("cannot get posts with title %s: %s", title, err.Error())
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
 		return nil, nil
+	}
+	if err != nil {
+		logrus.Errorf("cannot get posts by title %s: %s", title, err.Error())
+		return nil, err
 	}
 
 	for _, post := range posts {
@@ -83,7 +88,7 @@ func (pr *postRepository) GetByTitle(c context.Context, title string) ([]domain.
 		)
 		if err != nil {
 			logrus.Errorf("cannot get images with post id %d: %s", post.ID, err.Error())
-			//return nil, err
+			return nil, err
 		}
 
 		post.Images = images

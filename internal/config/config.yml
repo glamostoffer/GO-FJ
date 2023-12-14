@@ -3,9 +3,9 @@ http:
   port: '8000'
 
 postgres:
-  name: 'go-fj'
-  password: 'password'
+  name: 'go_fj'
+  password: 'DTCZffXxtzksTc77m0jRPxrdLD3RaV8C'
   max_cons: 50
-  host: 'localhost'
-  port: '5433'
+  host: 'dpg-cltdhqla73kc73eh8k30-a'
+  port: 'frankfurt-postgres.render.com'
   conn_timeout: 10

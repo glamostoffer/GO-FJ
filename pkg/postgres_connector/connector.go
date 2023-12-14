@@ -12,7 +12,8 @@ type Connector struct {
 
 func NewConnector(cfg Postgres) (*Connector, error) {
 	db, err := sqlx.Open("postgres", fmt.Sprintf(
-		"postgresql://root:%s@%s:%s/%s?sslmode=disable",
+		//postgres://root:DTCZffXxtzksTc77m0jRPxrdLD3RaV8C@dpg-cltdhqla73kc73eh8k30-a.frankfurt-postgres.render.com/go_fj
+		"postgresql://root:%s@%s.%s/%s?sslmode=disable",
 		cfg.Password,
 		cfg.Host,
 		cfg.Port,
