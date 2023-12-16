@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  database:
+    container_name: database
+    build: ./migrations
+    environment:
+      POSTGRES_DB: go-fj
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+    networks:
+      - my_network
+
+  application:
+    container_name: application
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      - my_network
+    depends_on:
+      - database
+    restart: on-failure
+
+networks:
+  my_network:
+    driver: bridge
